@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'lead-gen-pages': LeadGenPage;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -87,6 +88,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'lead-gen-pages': LeadGenPagesSelect<false> | LeadGenPagesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -727,6 +729,140 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-gen-pages".
+ */
+export interface LeadGenPage {
+  id: string;
+  title: string;
+  slug: string;
+  heroSection: {
+    headline: string;
+    subheadline?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    ctaButtons?:
+      | {
+          text: string;
+          link: string;
+          id?: string | null;
+        }[]
+      | null;
+    image: string | Media;
+    ctaText?: string | null;
+  };
+  servicesSection: {
+    title: string;
+    serviceItems?:
+      | {
+          icon?: (string | null) | Media;
+          title: string;
+          description?: {
+            root: {
+              type: string;
+              children: {
+                type: string;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  contactSection: {
+    title: string;
+    generalInquiries?: {
+      title?: string | null;
+      content?: {
+        root: {
+          type: string;
+          children: {
+            type: string;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      email?: string | null;
+    };
+    billingInquiries?: {
+      title?: string | null;
+      content?: {
+        root: {
+          type: string;
+          children: {
+            type: string;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      email?: string | null;
+    };
+    terminalContacts?: {
+      title?: string | null;
+      content?: {
+        root: {
+          type: string;
+          children: {
+            type: string;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      linkText?: string | null;
+      linkUrl?: string | null;
+    };
+  };
+  generatedBy?: string | null;
+  /**
+   * The original prompt used to generate this page
+   */
+  aiPrompt?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -916,6 +1052,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'lead-gen-pages';
+        value: string | LeadGenPage;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1273,6 +1413,80 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-gen-pages_select".
+ */
+export interface LeadGenPagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  heroSection?:
+    | T
+    | {
+        headline?: T;
+        subheadline?: T;
+        description?: T;
+        ctaButtons?:
+          | T
+          | {
+              text?: T;
+              link?: T;
+              id?: T;
+            };
+        image?: T;
+        ctaText?: T;
+      };
+  servicesSection?:
+    | T
+    | {
+        title?: T;
+        serviceItems?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  contactSection?:
+    | T
+    | {
+        title?: T;
+        generalInquiries?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              email?: T;
+            };
+        billingInquiries?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              email?: T;
+            };
+        terminalContacts?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              linkText?: T;
+              linkUrl?: T;
+            };
+      };
+  generatedBy?: T;
+  aiPrompt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
